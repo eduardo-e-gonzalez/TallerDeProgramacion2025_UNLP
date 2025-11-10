@@ -1,0 +1,52 @@
+programa E3P1
+procesos
+  proceso recogerFlores(ES flores:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores+1
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso moverse (ES alto:numero; ES ancho:numero; ES flores:numero)
+  comenzar
+    repetir alto
+      recogerFlores(flores)
+      mover
+    derecha
+    repetir ancho
+      recogerFlores(flores)
+      mover
+    izquierda
+    alto:=alto+1
+    ancho:=ancho+1
+  fin
+areas
+  zonaR1: AreaC(12,14,22,24)
+  zonaR2: AreaC(17,10,27,20)
+  zonaR3: AreaC(22,6,32,16)
+
+robots
+  robot rob1
+  variables
+    alto,ancho,flores:numero
+  comenzar
+    flores:=0
+    ancho:=1
+    alto:=1
+    repetir 4
+      moverse(alto,ancho,flores)
+  fin
+variables
+  r1,r2,r3:rob1
+comenzar
+  AsignarArea(r1,zonaR1)
+  AsignarArea(r2,zonaR2)
+  AsignarArea(r3,zonaR3)
+  Iniciar(r1,12,14)
+  Iniciar(r2,17,10)
+  Iniciar(r3,22,6)
+fin

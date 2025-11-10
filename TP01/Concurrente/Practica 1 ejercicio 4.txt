@@ -1,0 +1,71 @@
+programa E4TP1
+procesos
+  proceso recorrerCalle (ES objeto:numero;E ID:numero)
+  comenzar
+    si (ID = 2)
+      si(HayPapelEnLaEsquina)
+        mientras (HayPapelEnLaEsquina)
+          tomarPapel
+          objeto:=objeto+1
+    sino
+      si(HayFlorEnLaEsquina)
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+          objeto:=objeto+1
+  fin
+  proceso recorrerAvenida (ES objeto:numero;E ID:numero)
+  comenzar
+    repetir 99
+      recorrerCalle(objeto,ID)
+      mover
+    recorrerCalle(objeto,ID)
+  fin
+  proceso recorrerSector (ES objeto:numero;E ID:numero)
+  comenzar
+    repetir 24
+      recorrerAvenida(objeto,ID)
+      Pos(PosAv+1,1)
+    recorrerAvenida(objeto,ID)
+  fin
+  proceso recorrerArea(ES objeto:numero;E ID:numero)
+  comenzar
+    recorrerSector(objeto,ID)
+    Pos(PosAv+26,1)
+    recorrerSector(objeto,ID)
+  fin
+areas
+  a1:AreaC(1,1,25,100)
+  a2:AreaC(26,1,50,100)
+  a3:AreaC(51,1,75,100)
+  a4:AreaC(76,1,100,100)
+robots
+  robot papelero  {pares}
+  variables
+    papel,ID:numero
+  comenzar
+    ID:=2
+    papel:=0
+    recorrerArea(papel,ID)
+    Informar(papel)
+  fin
+  robot florero  {impares}
+  variables
+    flor,ID:numero
+  comenzar
+    ID:=1
+    flor:=0
+    recorrerArea(flor,ID)
+    Informar(flor)
+  fin
+
+variables
+  r1:florero
+  r2:papelero
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,a3)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,a4)
+  Iniciar(r1,1,1)
+  Iniciar(r2,26,1)
+fin

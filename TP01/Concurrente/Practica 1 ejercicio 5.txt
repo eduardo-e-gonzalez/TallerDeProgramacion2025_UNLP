@@ -1,0 +1,111 @@
+programa E5P1
+areas
+  a1:AreaC(1,75,15,75)
+  a1_2:AreaC(1,80,15,80)
+  a2:AreaC(75,80,75,100)
+  a2_2:AreaC(80,80,80,100)
+  a3:AreaC(70,10,100,10)
+  a3_2:AreaC(70,15,100,15)
+  a4:AreaC(10,1,10,10)
+  a4_2:AreaC(15,1,15,10)
+robots
+  robot rob1
+  variables
+    flor:numero
+  comenzar
+    flor:=0
+    derecha
+    repetir 14
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flor:=flor+1
+      mover
+    Pos(1,80)
+    repetir 14
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flor:=flor+1
+      mover
+    repetir flor
+      depositarFlor
+  fin
+  robot rob2
+  variables
+    papel:numero
+  comenzar
+    papel:=0
+    repetir 20
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papel:=papel+1
+      mover
+    Pos(80,80)
+    repetir 20
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papel:=papel+1
+      mover
+    Pos(75,80)
+    repetir papel
+      depositarPapel
+  fin
+  robot rob3
+  variables
+    flor:numero
+  comenzar
+    flor:=0
+    derecha
+    repetir 30
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flor:=flor+1
+      mover
+    Pos(70,15)
+    repetir 30
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flor:=flor+1
+      mover
+    repetir flor
+      depositarFlor
+  fin
+  robot rob4
+  variables
+    papel:numero
+  comenzar
+    papel:=0
+    repetir 9
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papel:=papel+1
+      mover
+    Pos(15,1)
+    repetir 9
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papel:=papel+1
+      mover
+    Pos(10,1)
+    repetir papel
+      depositarPapel
+  fin
+variables
+  r1:rob1
+  r2:rob2
+  r3:rob3
+  r4:rob4
+
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,a1_2)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,a2_2)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,a3_2)
+  AsignarArea(r4,a4)
+  AsignarArea(r4,a4_2)
+  Iniciar(r1,1,75)
+  Iniciar(r2,75,80)
+  Iniciar(r3,70,10)
+  Iniciar(r4,10,1)
+fin

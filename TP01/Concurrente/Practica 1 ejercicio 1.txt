@@ -1,0 +1,43 @@
+programa E1TP1
+procesos
+  proceso completarAvenida
+  variables
+    flores:numero
+    esquinasVacias:numero
+  comenzar
+    flores:=0
+    esquinasVacias:=0
+    repetir 99
+      si (HayFlorEnLaEsquina)
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+          flores:=flores+1
+      sino
+        esquinasVacias:=esquinasVacias+1
+      mover
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    Informar(flores)
+    Informar(esquinasVacias)
+  fin 
+
+areas
+  ciudad:AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    flores:numero
+    esquinasVacias:numero
+  comenzar
+    completarAvenida
+    Pos(3,1)
+    completarAvenida
+    Pos(5,1)
+    completarAvenida
+  fin 
+variables
+  r1:robot1
+comenzar
+  AsignarArea(r1,ciudad)
+  Iniciar(r1,1,1)
+fin

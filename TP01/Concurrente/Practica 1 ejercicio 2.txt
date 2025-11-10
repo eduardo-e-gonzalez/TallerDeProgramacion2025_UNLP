@@ -1,0 +1,52 @@
+programa E2P1
+procesos
+  proceso Limpiar
+  variables
+    papel:numero
+  comenzar
+    repetir 20
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papel:=papel+1
+      mover
+    Informar (papel)
+  fin
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot robot1
+  comenzar
+    Limpiar
+  fin
+  robot robot2
+  comenzar
+    derecha
+    Limpiar
+  fin
+  robot robot3
+  comenzar
+    repetir 2
+      derecha
+    Limpiar
+  fin
+  robot robot4
+  comenzar
+    repetir 3
+      derecha
+    Limpiar
+  fin
+variables
+  r1:robot1
+  r2:robot2
+  r3:robot3
+  r4:robot4
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  AsignarArea(r4,ciudad)
+  Iniciar (r1,10,10)
+  Iniciar (r2,10,30)
+  Iniciar (r3,30,30)
+  Iniciar (r4,30,10)
+fin
