@@ -1,0 +1,132 @@
+programa E4P2
+procesos
+  proceso finalizar
+  comenzar
+    EnviarMensaje(F,r1)
+    EnviarMensaje(F,r2)
+    EnviarMensaje(F,r3)
+    EnviarMensaje(F,r4)
+  fin
+  proceso EnviarID
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+  fin
+  proceso otorgarAcceso
+  variables
+    num:numero   
+  comenzar
+    Random(num,1,4)
+    si (num=1)
+      EnviarMensaje(V,r1)
+    sino
+      si (num=2)
+        EnviarMensaje(V,r2)
+      sino
+        si (num=3)
+          EnviarMensaje(V,r3)
+        sino
+          si (num=4)
+            EnviarMensaje(V,r4)
+  fin
+  proceso recolectar (ES flores:numero; ES papeles:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores+1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles+1
+  fin
+areas
+  cuadrante:AreaPC(25,25,75,75)
+  a1:AreaP(25,1,25,1)
+  a2:AreaP(30,1,30,1)
+  a3:AreaP(35,1,35,1)
+  a4:AreaP(40,1,40,1)
+  aJ:AreaP(1,1,1,1)
+robots
+  robot rob
+  variables
+    papeles,flores:numero
+    ID:numero
+    acceso,seguir:boolean
+    avOrigen,caOrigen:numero
+    av,ca:numero
+  comenzar
+    papeles:=0
+    flores:=0
+    avOrigen:=PosAv
+    caOrigen:=PosCa
+    RecibirMensaje(ID,j)
+    RecibirMensaje(acceso,j)
+    mientras (acceso)
+      Random(ca,25,75)
+      Random(av,25,75)
+      Pos (av,ca)
+      recolectar(flores,papeles)
+      EnviarMensaje(F,j)
+      Pos(avOrigen,caOrigen)
+      RecibirMensaje(acceso,j)
+    EnviarMensaje(ID,j)
+    EnviarMensaje(flores,j)
+    EnviarMensaje(papeles,j)
+  fin
+  robot jefe
+  variables
+    ID:numero
+    terminado:boolean
+    may:numero
+    flores,papeles:numero
+    ganador:numero
+  comenzar
+    may:=0
+    EnviarID
+    repetir 10
+      otorgarAcceso
+      RecibirMensaje(terminado,*)
+    finalizar
+    repetir 4
+      RecibirMensaje(ID,*)
+      si (ID=1)
+        RecibirMensaje(flores,r1)
+        RecibirMensaje(papeles,r1)
+      sino
+        si (ID=2)
+          RecibirMensaje(flores,r2)
+          RecibirMensaje(papeles,r2)
+        sino
+          si (ID=3)
+            RecibirMensaje(flores,r3)
+            RecibirMensaje(papeles,r3)
+          sino
+            si (ID=4)
+              RecibirMensaje(flores,r4)
+              RecibirMensaje(papeles,r4)
+      si (flores+papeles>may)
+        ganador:=ID
+        may:=flores+papeles
+    Informar ("ganador R",ganador)
+    Informar ("con ",may)
+  fin
+variables
+  r1,r2,r3,r4:rob
+  j:jefe
+comenzar
+  AsignarArea(r1,cuadrante)
+  AsignarArea(r1,a1)
+  AsignarArea(r2,cuadrante)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,cuadrante)
+  AsignarArea(r3,a3)
+  AsignarArea(r4,cuadrante)
+  AsignarArea(r4,a4)
+  AsignarArea(j,aJ)
+  Iniciar(r1,25,1)
+  Iniciar(r2,30,1)
+  Iniciar(r3,35,1)
+  Iniciar(r4,40,1)
+  Iniciar(j,1,1)
+fin

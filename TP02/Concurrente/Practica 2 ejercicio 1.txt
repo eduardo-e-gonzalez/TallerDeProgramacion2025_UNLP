@@ -1,0 +1,48 @@
+programa E1P2
+procesos
+  proceso recogerFlor(ES flor:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:=flor+1
+  fin
+areas
+  a1:AreaP(1,1,1,10)
+  a2:AreaP(2,11,2,20)
+robots
+  robot rob1
+  variables
+    flor,otraFlor:numero
+  comenzar
+    flor:=0
+    repetir 9
+      recogerFlor(flor)
+      mover
+    EnviarMensaje(flor,r2)
+    RecibirMensaje(otraFlor,r2)
+    si (flor>otraFlor)
+      Informar("Soy r1",flor)
+      Informar("La diferencia es de ",flor-otraFlor)
+  fin
+  robot rob2
+  variables
+    flor,otraFlor:numero
+  comenzar
+    flor:=0
+    repetir 9
+      recogerFlor(flor)
+      mover
+    EnviarMensaje(flor,r1)
+    RecibirMensaje(otraFlor,r1)
+    si (flor>otraFlor)
+      Informar("La diferencia es de ",flor-otraFlor)
+  fin
+variables
+  r1:rob1
+  r2:rob2
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,11)
+fin

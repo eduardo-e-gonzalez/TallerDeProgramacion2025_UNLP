@@ -1,0 +1,89 @@
+programa E1CP2
+procesos
+  proceso Recorrer(ES flor:numero)
+  comenzar
+    repetir 9
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        flor:=flor+1
+      mover
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flor:=flor+1
+  fin
+areas
+  a1:AreaP(1,1,1,10)
+  a2:AreaP(2,11,2,20)
+  a3:AreaP(3,21,3,30)
+  a4:AreaP(4,31,4,40)
+  a5:AreaP(5,41,5,50)
+  a6:AreaP(6,51,6,60)
+  aF:AreaP(2,1,2,1)
+robots
+  robot florero
+  variables
+    id:numero
+    flor:numero
+  comenzar
+    RecibirMensaje(id,f)
+    flor:=0
+    Recorrer(flor)
+    EnviarMensaje(id,f)
+    EnviarMensaje(flor,f)
+  fin 
+  robot fiscalizador
+  variables
+    ID,ganador,flores:numero
+    may:numero
+  comenzar
+    may:=-1
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    EnviarMensaje(5,r5)
+    EnviarMensaje(6,r6)
+    repetir 6
+      RecibirMensaje(ID,*)
+      si (ID=1)
+        RecibirMensaje(flores,r1)
+      sino
+        si (ID=2)
+          RecibirMensaje(flores,r2)
+        sino
+          si (ID=3)
+            RecibirMensaje(flores,r3)
+          sino
+            si (ID=4)
+              RecibirMensaje(flores,r4)
+            sino
+              si (ID=5)
+                RecibirMensaje(flores,r5)
+              sino
+                si (ID=5)
+                  RecibirMensaje(flores,r6)     
+      si(flores>may)
+        may:=flores
+        ganador:=ID
+    Informar ("Gana el rob ",ganador)
+    Informar ("Con ",may)
+  fin
+variables
+  r1,r2,r3,r4,r5,r6:florero
+  f:fiscalizador
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(r4,a4)
+  AsignarArea(r5,a5)
+  AsignarArea(r6,a6)
+  AsignarArea(f,aF)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,11)
+  Iniciar(r3,3,21)
+  Iniciar(r4,4,31)
+  Iniciar(r5,5,41)
+  Iniciar(r6,6,51)
+  Iniciar(f,2,1)
+fin

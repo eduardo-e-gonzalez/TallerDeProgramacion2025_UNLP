@@ -1,0 +1,62 @@
+programa E1BP2
+procesos
+  proceso recorrerAvenida (ES flor:numero)
+  comenzar
+    repetir 9
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        flor:=flor+1
+      mover
+  fin
+  proceso Analizar (E flor:numero;E X:numero)
+  comenzar
+    si (flor>X)
+      Informar ('gane yo',flor)
+  fin
+areas
+  a1: AreaP (1,1,1,10)
+  a2: AreaP(2,11,2,20)
+  af:AreaP(99,99,99,99)
+robots
+  robot rob
+  variables
+    ID:numero
+    flor:numero
+  comenzar
+    flor:=0
+    RecibirMensaje(ID,f)
+    recorrerAvenida(flor)
+    EnviarMensaje(ID,f)
+    EnviarMensaje(flor,f)
+  fin
+  robot fiscalizador
+  variables
+    flor1,flor2:numero
+    robot1,robot2:numero
+    ID:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    repetir 2
+      RecibirMensaje(ID,*)
+      si (ID=1)
+        RecibirMensaje(flor1,r1)
+      sino
+        RecibirMensaje(flor2,r2)
+    si (flor1>flor2)
+      Informar (1)
+    sino
+      Informar(2)
+  fin
+
+variables
+  r1,r2:rob
+  f:fiscalizador
+comenzar
+  AsignarArea(f,af)
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  Iniciar(f,99,99)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,11)
+fin

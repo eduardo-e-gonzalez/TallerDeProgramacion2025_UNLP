@@ -1,0 +1,123 @@
+programa E3BP2
+procesos
+  proceso recorrerFlores (ES flores:numero)
+  comenzar
+    repetir 9
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+  fin
+  proceso recorrerPapeles(ES papeles:numero)
+  comenzar
+    repetir 9
+      juntarPapeles(papeles)
+      mover
+    juntarPapeles(papeles)
+  fin
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles+1
+  fin
+  proceso juntarFlores (ES flores:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores+1
+  fin
+areas
+  a1:AreaP(1,1,10,1)
+  a1_2:AreaP(21,1,30,1)
+  a2:AreaP(11,1,20,1)
+  a2_2:AreaP(31,1,40,1)
+  b1:AreaP(1,5,10,5)
+  b1_2:AreaP(21,5,30,5)
+  b2:AreaP(11,5,20,5)
+  b2_2:AreaP(31,5,40,5)
+robots
+  robot rob1
+  variables
+    papeles:numero
+    ok:boolean
+  comenzar
+    papeles:=0
+    derecha
+    ok:=V
+    repetir 2
+      recorrerPapeles(papeles)
+      EnviarMensaje(papeles,A2)
+      si (ok)
+        Pos(PosAv+11,1)
+        ok:=F
+  fin
+  robot rob2
+  variables
+    papeles:numero
+    papeles1:numero
+    ok:boolean
+  comenzar
+    papeles:=0
+    derecha
+    ok:=V
+    repetir 2
+      RecibirMensaje(papeles1,A1)
+      recorrerPapeles(papeles)
+      papeles:=papeles+papeles1
+      si (ok)
+        Pos(PosAv+11,1)
+        ok:=F
+    Informar(papeles)
+  fin
+  robot rob3
+  variables
+    flores:numero
+    ok:boolean
+  comenzar
+    flores:=0
+    derecha
+    ok:=V
+    repetir 2
+      recorrerFlores(flores)
+      EnviarMensaje (flores,B2)
+      si (ok)
+        Pos(PosAv+11,5)
+        ok:=F
+  fin
+  robot rob4
+  variables
+    flores:numero
+    flores1:numero
+    ok:boolean
+  comenzar
+    flores:=0
+    derecha
+    ok:=V
+    repetir 2
+      RecibirMensaje(flores1,B1)
+      recorrerFlores(flores)
+      flores:=flores+flores1
+      si (ok)
+        Pos(PosAv+11,5)
+        ok:=F
+    Informar(flores)
+  fin
+variables
+  A1:rob1
+  A2:rob2
+  B1:rob3
+  B2:rob4
+comenzar
+  AsignarArea(A1,a1)
+  AsignarArea(A1,a1_2)
+  AsignarArea(A2,a2)
+  AsignarArea(A2,a2_2)
+  AsignarArea(B1,b1)
+  AsignarArea(B1,b1_2)
+  AsignarArea(B2,b2)
+  AsignarArea(B2,b2_2)
+  Iniciar(A1,1,1)
+  Iniciar(A2,11,1)
+  Iniciar(B1,1,5)
+  Iniciar(B2,11,5)
+fin

@@ -1,0 +1,84 @@
+programa E2P2
+procesos
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso contabilizar (ES flores:numero;ES papeles:numero)
+  variables
+    f,p:numero
+  comenzar
+    f:=0
+    p:=0
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores+1
+      f:=f+1
+    repetir f
+      depositarFlor
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles+1
+      p:=p+1
+    repetir p
+      depositarPapel
+  fin
+  proceso escalon (E alto:numero;ES cant:numero)
+  variables
+    flores,papeles:numero
+    ancho:numero
+  comenzar
+    papeles:=0
+    flores:=0
+    ancho:=1
+    repetir alto
+      contabilizar(flores,papeles)
+      mover
+    contabilizar(flores,papeles)
+    derecha
+    repetir ancho
+      contabilizar(flores,papeles)
+      mover
+    izquierda
+    si (flores>papeles)
+      cant:=cant+1
+  fin
+areas
+  a1:AreaP(2,1,6,21)
+  a2:AreaP(7,1,11,21)
+  a3:AreaP(12,1,16,21)
+  aj:AreaP(1,1,1,1)
+robots
+  robot rob
+  variables
+    ancho,cant:numero
+  comenzar
+    cant:=0
+    Random(ancho,1,5)
+    repetir 4
+      escalon(ancho,cant)
+    EnviarMensaje (cant,j)
+  fin
+  robot jefe
+  variables
+    suma,cant:numero
+  comenzar
+    repetir 3
+      RecibirMensaje(cant,*)
+      suma:=suma+cant
+    Informar("La suma es ",suma)
+  fin
+variables
+  r1,r2,r3:rob
+  j:jefe
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(j,aj)
+  Iniciar(r1,2,1)
+  Iniciar(r2,7,1)
+  Iniciar(r3,12,1)
+  Iniciar(j,1,1)
+fin
