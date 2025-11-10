@@ -1,0 +1,152 @@
+programa E6CP3
+procesos
+  proceso mensajes (E ID:numero)
+  variables
+    ca:numero
+    ok:boolean
+  comenzar
+    EnviarMensaje (V,j)
+    RecibirMensaje (ok,j)
+    EnviarMensaje (ID,j)
+    RecibirMensaje(ca,j)
+    Pos (1,ca)
+    derecha
+  fin
+  proceso recogerFlor (ES flor:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flor:=flor+1
+  fin
+  proceso recogerPapel (ES papel:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papel:=papel+1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot papelero
+  variables
+    papel:numero
+    ID:numero
+  comenzar
+    papel:=0
+    RecibirMensaje (ID,j)
+    repetir 6
+      repetir 6
+        recogerPapel(papel)
+        mover
+      recogerPapel(papel)
+      Pos (PosAv+1,9)
+    repetir 6
+      recogerPapel(papel)
+      mover
+    recogerPapel(papel)
+    mensajes(ID)
+    mientras (PosCa<100) & (papel<>0)
+      depositarPapel
+      mover
+      papel:=papel-1
+  fin
+  robot FP
+  variables
+    flor,papel:numero
+    ID:numero
+  comenzar
+    flor:=0
+    papel:=0
+    RecibirMensaje(ID,j)
+    repetir 9
+      repetir 9
+        recogerFlor(flor)
+        recogerPapel(papel)
+        mover
+      recogerFlor(flor)
+      recogerPapel(papel)
+      Pos(PosAv+1,5)
+    repetir 9
+      recogerFlor (flor)
+      recogerPapel (papel)
+      mover
+    recogerFlor(flor)
+    recogerPapel(papel)
+    mensajes(ID)
+    si (papel>flor)
+      mientras (PosCa<100) & (flor<>0)
+        depositarPapel
+        depositarFlor
+        mover
+        flor:=flor-1
+    sino
+      mientras (PosCa<100) & (papel<>0)
+        depositarFlor
+        depositarPapel
+        mover
+        papel:=papel-1
+  fin
+  robot florero
+  variables
+    flor:numero
+    ID:numero
+  comenzar
+    flor:=0
+    RecibirMensaje (ID,j)
+    repetir 5
+      repetir 5
+        recogerFlor(flor)
+        mover
+      recogerFlor(flor)
+      Pos (PosAv+1,2)
+    repetir 5
+      recogerFlor(flor)
+      mover
+    recogerFlor(flor)
+    mensajes (ID)
+    mientras (PosCa<100) & (flor<>0)
+      depositarFlor
+      mover
+      flor:=flor-1
+  fin
+  robot jefe
+  variables
+    ID,ca:numero
+    ok:boolean
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    ca:=19
+    repetir 3
+      RecibirMensaje (ok,*)
+    EnviarMensaje (V,r1)
+    EnviarMensaje (V,r2)
+    EnviarMensaje (V,r3)
+    repetir 3
+      ca:=ca+1
+      RecibirMensaje (ID,*)
+      si (ID=1)
+        EnviarMensaje (ca,r1)
+      sino
+        si (ID=2)
+          EnviarMensaje (ca,r2)
+        sino
+          si (ID=3)
+            EnviarMensaje (ca,r3)
+  fin
+variables
+  r1:florero
+  r2:FP
+  r3:papelero
+  j:jefe
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  AsignarArea (j,ciudad)
+  Iniciar (r1,2,2)
+  Iniciar (r2,5,5)
+  Iniciar (r3,9,9)
+  Iniciar (j,1,1)
+fin

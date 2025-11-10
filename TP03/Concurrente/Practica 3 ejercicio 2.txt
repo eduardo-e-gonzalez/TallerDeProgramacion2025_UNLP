@@ -1,0 +1,176 @@
+programa E2P3
+procesos
+  proceso bloquePapel (ES rango:numero; ES papel:numero; ES reversa:boolean)
+  comenzar
+    si (~reversa)
+      repetir 4
+        escalonPapel (rango,papel)
+        rango:=rango-1
+      reversa:=V
+    sino
+      repetir 4
+        escalonPapel (rango,papel)
+        rango:=rango+1
+  fin
+  proceso bloqueFlor (ES rango:numero; ES flor:numero; ES reversa:boolean)
+  comenzar
+    si (~reversa)
+      repetir 4
+        escalonFlor (rango,flor)
+        rango:=rango-1
+      reversa:=V
+    sino
+      repetir 4
+        escalonFlor (rango,flor)
+        rango:=rango+1
+  fin
+  proceso bloquearPapel (ES rango:numero; ES papel:numero;ES ID:numero)
+  comenzar
+    mover
+    recogerPapel(papel)
+    izquierda
+    BloquearEsquina(16,16)
+    mover
+    recogerPapel(papel)
+    derecha
+    derecha
+    mover
+    LiberarEsquina(16,16)
+    EnviarMensaje(ID,j)
+  fin
+  proceso bloquearFlor (ES rango:numero; ES flor:numero;ES ID:numero)
+  comenzar
+    mover
+    recogerFlor(flor)
+    derecha
+    BloquearEsquina(16,16)
+    mover
+    recogerFlor(flor)
+    derecha
+    derecha
+    mover
+    LiberarEsquina(16,16)
+    EnviarMensaje (ID,j)
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso recogerPapel (ES papel:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papel:=papel+1
+  fin
+  proceso recogerFlor (ES flor:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:=flor+1
+  fin
+  proceso escalonPapel (ES rango:numero; ES papel:numero)
+  comenzar
+    repetir rango
+      recogerPapel (papel)
+      mover
+    izquierda
+    repetir rango
+      recogerPapel(papel)
+      mover
+    derecha
+  fin
+  proceso escalonFlor (ES rango:numero; ES flor:numero)
+  comenzar
+    repetir rango
+      recogerFlor(flor)
+      mover
+    derecha
+    repetir rango
+      recogerFlor(flor)
+      mover
+    izquierda
+  fin
+areas
+  a1:AreaPC(1,1,15,30)
+  a2:AreaP(17,1,31,30)
+  esquina:AreaPC(16,16,16,16)
+robots
+  robot florero
+  variables
+    ID:numero
+    rango,flor:numero
+    reversa:boolean
+  comenzar
+    reversa:=F
+    flor:=0
+    rango:=5
+    RecibirMensaje(ID,j)
+    bloqueFlor(rango,flor,reversa)
+    recogerFlor(flor)
+    bloquearFlor(rango,flor,ID)
+    rango:=2
+    bloqueFlor(rango,flor,reversa)
+    recogerFlor(flor)
+    EnviarMensaje(ID,j)
+    EnviarMensaje (flor,j)
+  fin
+  robot papelero
+  variables
+    ID,papel,rango:numero
+    reversa:boolean
+  comenzar
+    reversa:=F
+    papel:=0
+    rango:=5
+    RecibirMensaje(ID,j)
+    bloquePapel(rango,papel,reversa)
+    recogerPapel(papel)
+    bloquearPapel(rango,papel,ID)
+    LiberarEsquina(16,16)
+    rango:=2
+    bloquePapel(rango,papel,reversa)
+    recogerPapel(papel)
+    EnviarMensaje(ID,j)
+    EnviarMensaje (papel,j)
+  fin
+  robot jefe
+  variables
+    ID,win:numero
+    ganador:boolean
+    flores,papeles:numero
+  comenzar
+    ganador:=F
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    repetir 2
+      RecibirMensaje (ID,*)
+      si (~ganador)
+        ganador:=V
+        win:=ID
+    repetir 2
+      RecibirMensaje (ID,*)
+      si (ID=1)
+        RecibirMensaje (flores,r1)
+      sino
+        RecibirMensaje (papeles,r2)
+    si (flores>papeles)
+      Informar ("gano el r1 con ",flores)
+    sino
+      Informar ("gano el r2 con ",papeles)
+    Informar ("El que llego primero a la esquina es el r",win)
+  fin
+variables
+  r1:florero
+  r2:papelero
+  j:jefe
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,esquina)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,esquina)
+  AsignarArea(j,a1)
+  Iniciar(r1,1,1)
+  Iniciar (r2,31,1)
+  Iniciar(j,15,1)
+fin

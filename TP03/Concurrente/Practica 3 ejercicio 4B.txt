@@ -1,0 +1,87 @@
+programa E4BP3
+procesos
+  proceso hacer (ES flor:numero;ES ok:boolean; E av:numero;E ca:numero)
+  comenzar
+    BloquearEsquina (10,10)
+    Pos (10,10)
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:=flor+1
+      Pos(av,ca)
+      LiberarEsquina(10,10)
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      depositarFlor 
+      Pos(av,ca)
+      LiberarEsquina(11,11)
+    sino
+      ok:=F
+      Pos (av,ca)
+      LiberarEsquina(10,10)
+  fin
+areas
+  cuadrante10:AreaPC(10,10,10,10)
+  cuadrante11:AreaPC(11,11,11,11)
+  a1:AreaP(9,9,9,9)
+  a2:AreaP(9,10,9,10)
+  a3:AreaP(9,11,9,11)
+  a4:AreaP(9,12,9,12)
+  aJ:AreaP(1,1,1,1)
+robots
+  robot rob
+  variables
+    ok:boolean
+    flor,ID,av,ca:numero
+  comenzar
+    flor:=0
+    ok:=V
+    av:=PosAv
+    ca:=PosCa
+    RecibirMensaje(ID,j)
+    mientras (ok)
+      hacer (flor,ok,av,ca)
+    EnviarMensaje(ID,j)
+    EnviarMensaje(flor,j)
+  fin
+  robot jefe
+  variables
+    ID,flores,total:numero
+  comenzar
+    total:=0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 4
+      RecibirMensaje(ID,*)
+      RecibirMensaje (flores,*)
+      total:=total+flores
+    Informar("El r que termino ultimo es ",ID)
+    Pos (11,11)
+    repetir total
+      tomarFlor
+  fin
+variables
+  r1,r2,r3,r4:rob
+  j:jefe
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,cuadrante10)
+  AsignarArea(r1,cuadrante11)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,cuadrante10)
+  AsignarArea(r2,cuadrante11)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,cuadrante10)
+  AsignarArea(r3,cuadrante11)
+  AsignarArea(r4,a4)
+  AsignarArea(r4,cuadrante10)
+  AsignarArea(r4,cuadrante11)
+  AsignarArea(j,aJ)
+  AsignarArea(j,cuadrante11)
+  Iniciar(r1,9,9)
+  Iniciar(r2,9,10)
+  Iniciar(r3,9,11)
+  Iniciar(r4,9,12)
+  Iniciar(j,1,1)
+fin

@@ -1,0 +1,95 @@
+programa E5P3
+procesos
+  proceso agarrar (ES papel:boolean;E av:numero;E ca:numero)
+  comenzar
+    Pos(11,11)
+    si (HayPapelEnLaEsquina)
+      tomarPapel
+    sino
+      papel:=F
+    Pos(av,ca)
+  fin
+areas
+  a1:AreaP(4,1,4,100)
+  a2:AreaP(6,1,6,100)
+  a3:AreaP(8,1,8,100)
+  a4:AreaP(10,1,10,100)
+  aJ:AreaP(1,1,1,1)
+  deposito:AreaPC(11,11,11,11)
+robots
+  robot rob
+  variables
+    pasos:numero
+    papel:boolean
+    av,ca:numero
+    ID:numero
+  comenzar
+    pasos:=0
+    papel:=V
+    RecibirMensaje(ID,j)
+    mientras(papel)
+      av:=PosAv
+      ca:=PosCa
+      BloquearEsquina(11,11)
+      agarrar(papel,av,ca)
+      LiberarEsquina(11,11)
+      si (ca<100)
+        si (papel)
+          depositarPapel
+          mover
+          pasos:=pasos+1
+        sino
+          papel:=F
+      sino
+        papel:=F
+    EnviarMensaje(ID,j)
+    EnviarMensaje(pasos,j)
+  fin
+  robot jefe
+  variables
+    ID,may,pasos,ganador:numero
+  comenzar
+    may:=-1
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 4
+      RecibirMensaje (ID,*)
+      si (ID=1)
+        RecibirMensaje (pasos,r1)
+      sino
+        si (ID=2)
+          RecibirMensaje (pasos,r2)
+        sino
+          si (ID=3)
+            RecibirMensaje (pasos,r3)
+          sino
+            si (ID=4)
+              RecibirMensaje (pasos,r4)
+      si (pasos>may)
+        ganador:=ID
+        may:=pasos
+    Informar ("El ganador es ", ganador)
+    Informar ("Con un total de pasos ",may)
+  fin
+variables
+  r1,r2,r3,r4:rob
+  j:jefe
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,deposito)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,deposito)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,deposito)
+  AsignarArea(r4,a4)
+  AsignarArea(r4,deposito)
+  AsignarArea(j,aJ)
+  Iniciar(r1,4,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,8,1)
+  Iniciar(r4,10,1)
+  Iniciar(j,1,1)
+fin
+
