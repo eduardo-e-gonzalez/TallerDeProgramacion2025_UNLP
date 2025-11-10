@@ -1,0 +1,95 @@
+programa cincoCuadrados
+procesos
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores+1
+  fin
+  
+  proceso cuadrado(E tamanio:numero; ES flores:numero)
+  comenzar
+    repetir 4
+      repetir tamanio
+        juntarFlores(flores)
+        mover
+    derecha
+  fin
+  
+  proceso depositarDaUna(E flores:numero)
+  comenzar
+    avAct:=PosAv
+    caACt:=PosCa
+    repetir floresa
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarFlor
+      Pos(avAct,caAct)
+      LiberarEsquina(50,50)
+  fin
+     
+areas
+  AreaR1: AreaP (1,1,5,25)
+  AreaR2: AreaP (8,1,12,25)
+  AreaR3: AreaP (15,1,19,25)
+  AreaCoor: AreaP (51,1,51,1)
+  AreaDepo: AreaPC(50,50,50,50)
+robots
+  robot florero
+  variables
+    flores, fTotales:numero
+    tamanio:numero
+    av,ca,avAct,caAct:numero
+    listo:numero
+    id:numero
+    terminaron:numero
+  comenzar
+    flores:=0
+    fTotales:=0
+    terminaron:=0
+    RecibirMensaje(id,rc)
+    repetir 5
+      Random(tamanio,1,5)
+      cuadrado(tamanio, flores)
+      EnviarMensaje(id,r1)
+      EnviarMensaje(id,r2)
+      EnviarMensaje(id,r3)
+      terminaron:=0
+      id:=0
+      mientras(terminaron<3)
+        RecibirMensaje(id,*)
+        si (id=1) o (id=2) o (id=3)
+          terminaron:=terminaron+1
+      repetir tamanio
+        mover
+    depositarDaUna(flores)
+  fin
+  
+  robot coor
+  variables
+    id:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+variables
+  r1: florero
+  r2: florero
+  r3:  florero
+  rc: coor
+comenzar
+  AsignarArea(r1, AreaR1)
+  AsignarArea(r1, AreaDepo)
+  AsignarArea(r2, AreaR2)
+  AsignarArea(r2, AreaDepo)
+  AsignarArea(r3, AreaR3)
+  AsignarArea(r3, AreaDepo)
+  AsignarArea(rc, AreaCoor)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 8,1)
+  Iniciar(r3, 15,1)
+  Iniciar(rc, 51,1)
+  
+fin

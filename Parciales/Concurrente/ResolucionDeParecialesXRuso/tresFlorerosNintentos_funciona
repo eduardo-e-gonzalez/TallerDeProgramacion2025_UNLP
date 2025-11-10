@@ -1,0 +1,121 @@
+programa Tresrobot2x2
+procesos
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+  
+  proceso escalon(E alto:numero; E ancho:numero; ES flores:numero)
+  comenzar
+    repetir alto
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+    derecha
+    repetir ancho
+      juntarFlores(flores)
+      mover
+  fin
+  
+  proceso girar
+  comenzar
+    repetir 3
+      derecha
+  fin
+    
+  proceso depositarDaUna(E flores:numero)
+  variables
+    avAct,caAct:numero
+  comenzar
+    avAct:=PosAv
+    caAct:=PosCa
+    repetir flores
+      BloquearEsquina(99,99)
+      Pos(99,99)
+      depositarFlor
+      Pos(avAct,caAct)
+      LiberarEsquina(99,99)
+  fin
+  
+  proceso enviarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+areas
+  deposito: AreaC (99,99,99,99)
+  AreaFisca: AreaP (1,1,1,1)
+  AreaR1: AreaP (2,1,12,11)
+  AreaR2: AreaP (20,1,30,11)
+  AreaR3: AreaP (40,1,50,11)
+robots
+  robot florero
+  variables
+    escalones:numero
+    flores,SinFlores:numero
+    alto, ancho:numero
+    terminaron:boolean
+    avAct,caAct:numero
+    id:numero
+  comenzar
+    alto:=2
+    ancho:=2
+    flores:=0
+    SinFlores:=0
+    terminaron:=F
+    RecibirMensaje(id,rf)
+    RecibirMensaje(escalones,rf)
+    repetir escalones
+      escalon(alto,ancho, flores)
+      si (flores=0)
+        SinFlores:=SinFlores+1
+        girar
+    depositarDaUna(flores)
+    EnviarMensaje(id,rf)
+    EnviarMensaje(SinFlores,rf)  
+  fin
+  
+  robot fiscalizador
+  variables
+    escalones:numero
+    flores:numero
+    SinFlores, TotalSinFlores:numero
+    id:numero
+    esc1,esc2,esc3:numero
+  comenzar
+    enviarId    {envio los 3 mensajes con id NO VA}
+    TotalSinFlores:=0
+    SinFlores:=0
+    Random(esc1,1,5)
+    Random(esc2,1,5)
+    Random(esc3,1,5)
+    EnviarMensaje(esc1, r1)
+    EnviarMensaje(esc2, r2)
+    EnviarMensaje(esc3, r3)
+    repetir 3
+      RecibirMensaje(SinFlores,*)
+      TotalSinFlores:=TotalSinFlores+SinFlores  
+    Informar("Sinflores",TotalSinFlores)
+  fin
+variables
+  r1: florero
+  r2: florero
+  r3: florero
+  rf: fiscalizador
+comenzar
+  AsignarArea(r1,AreaR1)
+  AsignarArea(r1,deposito)
+  AsignarArea(r2,AreaR2)
+  AsignarArea(r2,deposito)
+  AsignarArea(r3,AreaR3)
+  AsignarArea(r3,deposito)
+  AsignarArea(rf, AreaFisca)
+  Iniciar(r1,2,1)
+  Iniciar(r2,20,1)
+  Iniciar(r3,40,1)
+  Iniciar(rf,1,1)
+fin

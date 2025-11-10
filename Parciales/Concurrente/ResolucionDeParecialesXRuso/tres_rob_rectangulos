@@ -1,0 +1,119 @@
+programa tres_rob_rectangulos
+procesos
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+  
+  proceso enviarID
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+  proceso rectangulo(E alto:numero; E ancho:numero; ES flores:numero)
+  comenzar
+    repetir 2
+      repetir alto
+        juntarFlores(flores)
+        mover
+      derecha
+      repetir ancho
+        juntarFlores(flores)
+        mover
+      derecha
+  fin
+  
+  proceso depositarDaUna( E flores:numero)
+  variables
+    avAct,caAct:numero
+  comenzar
+    avAct:= PosAv
+    caAct:=PosCa
+    repetir flores
+      BloquearEsquina(25,25)
+      Pos(25,25)
+      depositarFlor
+      Pos(avAct,caAct)
+      LiberarEsquina(25,25)
+  fin
+    
+  proceso maximo(E flores:numero E id:numero; ES max:numero; ES idMax:numero)
+  comenzar
+    si(flores>max)
+      max:=flores
+      idMax:=id
+  fin
+areas
+  AreaReco1: AreaP (1,1,6,11)
+  AreaReco2: AreaP (7,1,12,11)
+  AreaReco3: AreaP (13,1,18,11)
+  AreaDepo: AreaP (25,25,25,25)
+  AreaCoo: AreaPC (24,24,24,24)
+robots
+  robot recolector
+  variables
+    flores, totalFlores:numero
+    alto,ancho,id:numero
+  comenzar
+    RecibirMensaje(id,rc)
+    RecibirMensaje(alto,rc)
+    RecibirMensaje(ancho,rc)
+    rectangulo(alto,ancho,flores)
+    depositarDaUna(flores)
+    EnviarMensaje(id,rc)
+    EnviarMensaje(flores,rc)
+  fin
+  
+  robot coordinador
+  variables
+    flores, totalFlores:numero
+    idMax,max:numero
+    alto,ancho,id:numero
+    alto1,alto2,alto3,ancho1,ancho2,ancho3:numero
+  comenzar
+    flores:=0
+    totalFlores:=0
+    idMax:=0
+    max:=0
+    enviarID
+    Random(alto1,1,10)
+    Random(ancho1,1,5)
+    Random(alto2,1,10)
+    Random(ancho2,1,5)
+    Random(alto3,1,10)
+    Random(ancho3,1,5)
+    EnviarMensaje(alto1,r1)
+    EnviarMensaje(ancho1,r1)
+    EnviarMensaje(alto2,r2)
+    EnviarMensaje(ancho2,r2)
+    EnviarMensaje(alto3,r3)
+    EnviarMensaje(ancho3,r3)
+    repetir 3
+      RecibirMensaje(id,*)
+      RecibirMensaje(flores,*)
+      maximo(flores,id,max,idMax)
+    Informar("MaxRob es", idMax) 
+  fin
+variables
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  rc: coordinador
+comenzar
+  AsignarArea(r1, AreaReco1)
+  AsignarArea(r1, AreaDepo)
+  AsignarArea(r2, AreaReco2)
+  AsignarArea(r2, AreaDepo)
+  AsignarArea(r3, AreaReco3)
+  AsignarArea(r3, AreaDepo)
+  AsignarArea(rc, AreaCoo)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 7,1)
+  Iniciar(r3, 13,1)
+  Iniciar(rc, 24,24)
+  
+fin
